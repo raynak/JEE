@@ -1,0 +1,15 @@
+/* AUTOMATICALLY GENERATED ON Thu Apr 09 12:00:19 CEST 2015*/
+/* DO NOT EDIT */
+
+grant {
+  permission javax.security.jacc.EJBMethodPermission "NameStorageBean", "getName,Local,";
+  permission javax.security.jacc.EJBMethodPermission "HelloWorldResource", "getGreeting,Local,";
+  permission javax.security.jacc.EJBMethodPermission "NameStorageBean", "setName,Local,java.lang.String";
+  permission javax.security.jacc.EJBMethodPermission "HelloWorldResource", "setName,Local,java.lang.String";
+};
+
+grant      principal * * {
+  permission javax.security.jacc.EJBRoleRefPermission "HelloWorldResource", "**";
+  permission javax.security.jacc.EJBRoleRefPermission "NameStorageBean", "**";
+};
+
