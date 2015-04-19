@@ -478,9 +478,10 @@
       </module>
     </application>
     <application context-root="/BooksOnline" location="file:/home/raynak/Universite/M1S2/CAR/JEE/BooksOnline/build/web/" name="BooksOnline" directory-deployed="true" object-type="user">
-      <property name="appLocation" value="file:/home/raynak/Universite/M1S2/CAR/JEE/BooksOnline/build/web/"></property>
       <property name="archiveType" value="war"></property>
+      <property name="appLocation" value="file:/home/raynak/Universite/M1S2/CAR/JEE/BooksOnline/build/web/"></property>
       <property name="defaultAppName" value="web"></property>
+      <property name="keepSessions" value="true"></property>
       <module name="BooksOnline">
         <engine sniffer="security"></engine>
         <engine sniffer="web"></engine>

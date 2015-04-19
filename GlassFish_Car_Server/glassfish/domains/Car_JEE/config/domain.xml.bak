@@ -64,6 +64,7 @@
     <server name="server" config-ref="server-config">
       <application-ref ref="HelloWorld" virtual-servers="server"></application-ref>
       <application-ref ref="__admingui" virtual-servers="__asadmin"></application-ref>
+      <application-ref ref="BooksOnline" virtual-servers="server"></application-ref>
       <resource-ref ref="jdbc/__TimerPool"></resource-ref>
       <resource-ref ref="jdbc/__default"></resource-ref>
       <resource-ref ref="jdbc/sample"></resource-ref>
@@ -473,6 +474,16 @@
         <engine sniffer="ejb"></engine>
         <engine sniffer="security"></engine>
         <engine sniffer="weld"></engine>
+        <engine sniffer="web"></engine>
+      </module>
+    </application>
+    <application context-root="/BooksOnline" location="file:/home/raynak/Universite/M1S2/CAR/JEE/BooksOnline/build/web/" name="BooksOnline" directory-deployed="true" object-type="user">
+      <property name="archiveType" value="war"></property>
+      <property name="appLocation" value="file:/home/raynak/Universite/M1S2/CAR/JEE/BooksOnline/build/web/"></property>
+      <property name="defaultAppName" value="web"></property>
+      <property name="keepSessions" value="true"></property>
+      <module name="BooksOnline">
+        <engine sniffer="security"></engine>
         <engine sniffer="web"></engine>
       </module>
     </application>
