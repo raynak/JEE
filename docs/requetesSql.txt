@@ -1,0 +1,25 @@
+CREATE TABLE books (
+	id INT NOT NULL PRIMARY KEY,
+	title VARCHAR(50),
+	author VARCHAR(50),
+	years INT,
+	editor VARCHAR(50),
+	category VARCHAR(15)
+);
+
+CREATE TABLE users (
+	id INT NOT NULL PRIMARY KEY,
+	firstname VARCHAR(50),
+	lastname VARCHAR(50),
+	login VARCHAR(20),
+	password VARCHAR(20)
+);
+
+CREATE TABLE shoppingcartItems (
+	id INT NOT NULL PRIMARY KEY,
+	user_id INT,
+	item_id INT,
+	FOREIGN KEY (item_id ) REFERENCES books(id),
+	FOREIGN KEY (user_id ) REFERENCES users(id )
+);
+	
