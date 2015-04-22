@@ -1,0 +1,13 @@
+/* AUTOMATICALLY GENERATED ON Wed Apr 22 11:31:56 CEST 2015*/
+/* DO NOT EDIT */
+
+grant {
+  permission javax.security.jacc.EJBMethodPermission "SessionManagerBean", "getActiveSessionCount,Local,";
+  permission javax.security.jacc.EJBMethodPermission "SessionManagerBean", "sessionDestroyed,Local,javax.servlet.http.HttpSessionEvent";
+  permission javax.security.jacc.EJBMethodPermission "SessionManagerBean", "sessionCreated,Local,javax.servlet.http.HttpSessionEvent";
+};
+
+grant      principal * * {
+  permission javax.security.jacc.EJBRoleRefPermission "SessionManagerBean", "**";
+};
+

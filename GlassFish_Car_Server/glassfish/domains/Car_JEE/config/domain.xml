@@ -59,12 +59,23 @@
     <managed-executor-service jndi-name="concurrent/__defaultManagedExecutorService" object-type="system-all"></managed-executor-service>
     <managed-scheduled-executor-service jndi-name="concurrent/__defaultManagedScheduledExecutorService" object-type="system-all"></managed-scheduled-executor-service>
     <managed-thread-factory jndi-name="concurrent/__defaultManagedThreadFactory" object-type="system-all"></managed-thread-factory>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="org.apache.derby.jdbc.ClientDataSource" wrap-jdbc-objects="false" res-type="javax.sql.DataSource" name="derby_net_Biblio_biblioPool">
+      <property name="URL" value="jdbc:derby://localhost:1527/Biblio"></property>
+      <property name="driverClass" value="org.apache.derby.jdbc.ClientDriver"></property>
+      <property name="Password" value="biblio"></property>
+      <property name="portNumber" value="1527"></property>
+      <property name="databaseName" value="Biblio"></property>
+      <property name="User" value="biblio"></property>
+      <property name="serverName" value="localhost"></property>
+    </jdbc-connection-pool>
+    <jdbc-resource pool-name="derby_net_Biblio_biblioPool" jndi-name="booksDB"></jdbc-resource>
   </resources>
   <servers>
     <server name="server" config-ref="server-config">
       <application-ref ref="HelloWorld" virtual-servers="server"></application-ref>
       <application-ref ref="__admingui" virtual-servers="__asadmin"></application-ref>
       <application-ref ref="BooksOnline" virtual-servers="server"></application-ref>
+      <application-ref ref="BookShelf-war" virtual-servers="server"></application-ref>
       <resource-ref ref="jdbc/__TimerPool"></resource-ref>
       <resource-ref ref="jdbc/__default"></resource-ref>
       <resource-ref ref="jdbc/sample"></resource-ref>
@@ -73,6 +84,7 @@
       <resource-ref ref="concurrent/__defaultManagedExecutorService"></resource-ref>
       <resource-ref ref="concurrent/__defaultManagedScheduledExecutorService"></resource-ref>
       <resource-ref ref="concurrent/__defaultManagedThreadFactory"></resource-ref>
+      <resource-ref ref="booksDB"></resource-ref>
     </server>
   </servers>
   <nodes>
@@ -484,6 +496,20 @@
       <property name="keepSessions" value="true"></property>
       <module name="BooksOnline">
         <engine sniffer="security"></engine>
+        <engine sniffer="web"></engine>
+      </module>
+    </application>
+    <application context-root="/BookShelf-war" location="file:/home/raynak/Universite/M1S2/CAR/JEE/BookShelf/BookShelf-war/build/web/" name="BookShelf-war" directory-deployed="true" object-type="user">
+      <property name="archiveType" value="war"></property>
+      <property name="org.glassfish.ejb.startup.keepstate" value="true"></property>
+      <property name="appLocation" value="file:/home/raynak/Universite/M1S2/CAR/JEE/BookShelf/BookShelf-war/build/web/"></property>
+      <property name="org.glassfish.ejb.container.application_unique_id" value="93696440592564224"></property>
+      <property name="defaultAppName" value="web"></property>
+      <property name="keepSessions" value="true"></property>
+      <module name="BookShelf-war">
+        <engine sniffer="ejb"></engine>
+        <engine sniffer="security"></engine>
+        <engine sniffer="weld"></engine>
         <engine sniffer="web"></engine>
       </module>
     </application>

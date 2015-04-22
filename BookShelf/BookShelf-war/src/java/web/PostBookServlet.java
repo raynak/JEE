@@ -7,29 +7,33 @@ package web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
-import javax.ejb.EJB;
+import javax.jms.Queue;
+import javax.annotation.Resource;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Book;
-import model.BookFacade;
-import model.SessionManagerBean;
 
 /**
  *
  * @author raynak
  */
-@WebServlet(name = "ListBookServlet", urlPatterns = {"/ListBookServlet"})
-public class ListBookServlet extends HttpServlet {
-    @EJB
-    private SessionManagerBean sessionManagerBean;
-    @EJB
-    private BookFacade bookFacade;
-
+@WebServlet(name = "PostBookServlet", urlPatterns = {"/AddBook"})
+public class PostBookServlet extends HttpServlet {
+    @Resource(mappedName="jms/BookFactory")
+    private ConnectionFactory connectionFactory;
+    
+    @Resource(mappedName="jms/Book")
+    private Queue queue;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,34 +45,46 @@ public class ListBookServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getSession(true);
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ListBookServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ListBookServlet at " + request.getContextPath() + "</h1>");
-
-            List books = bookFacade.findAll();
-            Iterator it = books.iterator();
-            while (it.hasNext()){
-                Book theBook = (Book) it.next();
-                out.println("<b>"+theBook.getTitle()+" écrit par "+theBook.getAuthor()+" en "+theBook.getYears()+".</b></br>");
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        if ((title!=null) && (author!=null)){
+            try {
+                   Connection connection = connectionFactory.createConnection();
+                   Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                   MessageProducer messageProducer = session.createProducer(queue);
+                   
+                   ObjectMessage message = session.createObjectMessage();
+                   /*creation of the new book*/
+                   Book book = new Book();
+                   book.setTitle(title);
+                   book.setAuthor(author);
+                   
+                   message.setObject(book);
+                   messageProducer.send(message);
+                   messageProducer.close();
+                   
+                   connection.close();
+                   response.sendRedirect("ListBooks");
+            }catch (JMSException e){
+                System.out.println(e.getMessage()); 
             }
-            
-            out.println("<a href='PostMessage'>Add new message</a>");
-
-            out.println("<br><br>");
-            out.println(sessionManagerBean.getActiveSessionCount() + " user(s) reading the news.");
-
-            out.println("</body>");
-            out.println("</html>");
         }
+        PrintWriter out = response.getWriter();
+    
+        out.println("Servlet PostMessage at " + request.getContextPath() + "</h1>");
+
+        // The following code adds the form to the web page
+        out.println("<form>");
+        out.println("Title: <input type='text' name='title'><br/>");
+        out.println("Message: <textarea name='body'></textarea><br/>");
+        out.println("<input type='submit'><br/>");
+        out.println("</form>");
+
+        out.println("</body>");
+
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

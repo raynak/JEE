@@ -1,4 +1,4 @@
-/* AUTOMATICALLY GENERATED ON Wed Apr 22 12:49:02 CEST 2015*/
+/* AUTOMATICALLY GENERATED ON Wed Apr 22 11:31:57 CEST 2015*/
 /* DO NOT EDIT */
 
 grant {
@@ -7,9 +7,9 @@ grant {
 };
 
 grant      principal * * {
-  permission javax.security.jacc.WebRoleRefPermission "helloworld.ApplicationConfig", "**";
   permission javax.security.jacc.WebRoleRefPermission "jsp", "**";
   permission javax.security.jacc.WebRoleRefPermission "", "**";
   permission javax.security.jacc.WebRoleRefPermission "default", "**";
+  permission javax.security.jacc.WebRoleRefPermission "PostBookServlet", "**";
 };
 
